@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const jet = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 exports.register = async (req, res) => {
@@ -14,7 +14,7 @@ exports.register = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({
-            messgae: (`CreateError: ${error.message}`);
+            messgae: (`CreateError: ${error.message}`)
         });
     }
 };
@@ -35,7 +35,10 @@ exports.login = async (req, res) => {
             role: user.role
         }, process.env.JWT_SECRET, { expiresIn: '1d' }) // Create Token
         res.status(200).json({
-            token, user: { name: user.name, role: user.role }
+            token, user: {
+                name: user.name,
+                role: user.role
+            }
         })
     } catch (error) {
         res.status(500).json({
