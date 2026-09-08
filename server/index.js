@@ -1,11 +1,14 @@
 const express = require('express');
 require('dotenv').config();
-
+const cors = require('cors');
 const connectDB = require('./config/db');
-connectDB();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
+
+connectDB();
+
 app.use('/api/auth', require('./routes/userRoutes'));
 app.use('/api/tournaments', require('./routes/tournamentRoutes'));
 
