@@ -8,9 +8,15 @@ exports.register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(password, salt);
 
-        User.create({ name, bgmiId, email, password: hashPassword });
+        const newUser = await User.create({ name, bgmiId, email, password: hashPassword });
+        
+        const token = jwt.sign({
+            id: newUser._id,
+            role: newUser.role
+        }, process.env.JWT_SECRET, { expiresIn: '1d' });
+
         res.status(201).json({
-            message: 'User registered'
+            token, user: { name: newUser.name, role: newUser.role }
         });
     } catch (error) {
         res.status(500).json({

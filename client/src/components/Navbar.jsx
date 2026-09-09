@@ -17,6 +17,7 @@ const Navbar = () => {
 
                     {user ? (
                         <>
+                            <span className="text-orange-500 font-bold italic mr-2">Hey, {user.name}</span>
                             {user.role === 'admin' && (
                                 <Link to="/admin" className="text-blue-400 hover:text-blue-300">Dashboard</Link>
                             )}

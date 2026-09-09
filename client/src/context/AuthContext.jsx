@@ -4,18 +4,22 @@ import axios from 'axios';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(() => {
+        const savedUser = localStorage.getItem('user');
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
     const [token, setToken] = useState(localStorage.getItem('token') || null);
 
-    // Jab bhi token change ho , localstorage me update kro
     useEffect(() => {
-        if (token) {
-            localStorage.setItem('token', token)
+        if (token && user) {
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
         } else {
             localStorage.removeItem('token');
+            localStorage.removeItem('user');
             setUser(null);
         }
-    }, [token]);
+    }, [token, user]);
 
     const login = (userData, authToken) => {
         setToken(authToken);
